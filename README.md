@@ -52,3 +52,11 @@ urlpatterns = [
 ```
 
 ## Modelos implementados e interfaces
+
+
+## Migracion
+
+Crear archivos de migración en 
+`<app_name>/datamigration/<archivo_migracion.py>`
+que debe contener una función llamada `migration()`, 
+misma que será ejecutada para aplicar la migración correspondiente
