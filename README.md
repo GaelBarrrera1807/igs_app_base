@@ -53,10 +53,16 @@ urlpatterns = [
 
 ## Modelos implementados e interfaces
 
+### Group - Perfiles de Usuario
 
-## Migracion
+
+## Migraciones
 
 Crear archivos de migración en 
 `<app_name>/datamigration/<archivo_migracion.py>`
 que debe contener una función llamada `migration()`, 
 misma que será ejecutada para aplicar la migración correspondiente
+
+El order de aplicación de las migraciones se realizará en orden alfabético 
+case-sensitive del nombre del archivo en el directorio `datamigration` 
+de la aplicación
