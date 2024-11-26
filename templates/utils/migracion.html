@@ -1,0 +1,20 @@
+{% extends "html/html_struct.html" %}
+
+{% block content %}
+    {% for migracion in migraciones %}
+        <div class="alert alert-{% if migracion.result == 'ok' %}success{% elif migracion.result == 'previso' %}secondary{% else %}warning{% endif %}" role="alert">
+            <div class="row">
+                <div class="col-sm-4">{{ migracion.file }}</div>
+                <div class="col-sm-8">
+                    {% if migracion.result == 'ok' %}
+                        Aplicado correctamente
+                    {% elif migracion.result == 'previso' %}
+                        Aplicado previamente
+                    {% else %}
+                        {{ migracion.result }}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}

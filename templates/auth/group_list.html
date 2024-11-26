@@ -1,0 +1,33 @@
+{% extends "html/html_struct.html" %}
+
+{% block content%}
+    {% if object_list %}
+        <table id="main-data-table">
+            <thead>
+            <tr>
+                <th></th>
+                <th>Perfil</th>
+            </tr>
+            </thead>
+            <tfoot>
+            <tr>
+                <th></th>
+                <th>Perfil</th>
+            </tr>
+            </tfoot>
+            <tbody>
+            {% for reg in object_list %}
+                 <tr>
+                    <td><input class="form-check-input" type="checkbox" value="{{ reg.pk }}" name="pk" /></td>
+                     <td><a href="{% url 'group_read' reg.pk %}">{{ reg.name }}</a></td>
+                 </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+    <script type="text/javascript">
+        let update_url = `{% url 'group_update' pk=0 %}`;
+        let delete_many_url = `{% url 'group_delete_many' %}`;
+    </script>
+{% endblock %}

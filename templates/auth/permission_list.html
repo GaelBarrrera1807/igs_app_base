@@ -1,0 +1,39 @@
+{% extends "html/html_struct.html" %}
+
+{% block content%}
+    {% if object_list %}
+        <table id="main-data-table">
+            <thead>
+            <tr>
+                <th></th>
+                <th>Permiso</th>
+                <th>Tipo</th>
+                <th>Código</th>
+            </tr>
+            </thead>
+            <tfoot>
+            <tr>
+                <th></th>
+                <th>Permiso</th>
+                <th>Tipo</th>
+                <th>Código</th>
+            </tr>
+            </tfoot>
+            <tbody>
+            {% for reg in object_list %}
+                <tr>
+                    <td><input class="form-check-input" type="checkbox" value="{{ reg.pk }}" name="pk" /></td>
+                    <td><a href="{% url 'permission_read' reg.pk %}">{{ reg.name }}</a></td>
+                    <td>{{ reg.content_type }}</td>
+                    <td>{{ reg.codename }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+    <script type="text/javascript">
+        let update_url = `{% url 'permission_update' pk=0 %}`;
+        let delete_many_url = `{% url 'permission_delete_many' %}`;
+    </script>
+{% endblock %}

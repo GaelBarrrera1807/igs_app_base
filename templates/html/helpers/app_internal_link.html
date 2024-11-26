@@ -1,0 +1,14 @@
+{% load static %}
+{% if type == 'css' %}
+    {% for app in apps %}
+        <link rel="stylesheet" href="{% static 'css' %}/{{app}}.css" /><!-- Auto CSS -->
+    {% endfor %}
+{% elif type == 'js' %}
+    {% for app in apps %}
+        <script type="text/javascript" src="{% static 'js' %}/{{app}}.js"></script><!-- Auto JS -->
+    {% endfor %}
+{% else %}
+    <div class="alert alert-danger" role="alert">
+        Tipo de inclusión de archivos no implementado: {{ type }}
+    </div>
+{% endif %}
