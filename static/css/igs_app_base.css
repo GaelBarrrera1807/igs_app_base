@@ -1,0 +1,155 @@
+@charset "UTF-8";
+
+/***
+    Login Form Styles
+ */
+
+div.body-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    background-color: #ffffff;
+}
+
+form.form-signin {
+    width: 100%;
+    max-width: 480px;
+    padding: 25px;
+    margin: auto;
+    border: 1px solid #e0e6ed;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px 0 rgb(85 85 85 / 9%), 0 1px 20px 0 rgb(0 0 0 / 8%), 0px 1px 11px 0px rgb(0 0 0 / 6%);
+}
+
+form.form-signin label {
+    display: block;
+    text-align: left;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+}
+
+/***
+    Indentation in SimpleDataTable  Styles
+ */
+
+.p-left-0px {
+    padding-left: 0px !important;
+}
+
+.p-left-25px {
+    padding-left: 25px !important;
+}
+
+.p-left-50px {
+    padding-left: 50px !important;
+}
+
+.p-left-75px {
+    padding-left: 75px !important;
+}
+
+.p-left-100px {
+    padding-left: 100px !important;
+}
+
+.p-left-125px {
+    padding-left: 125px !important;
+}
+
+.p-left-150px {
+    padding-left: 150px !important;
+}
+
+/***
+    SideNav Scrollbar Styles
+ */
+
+#sidenavAccordion > div::-webkit-scrollbar {
+    width: 10px;
+}
+
+#sidenavAccordion > div::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey;
+    border-radius: 10px;
+}
+
+#sidenavAccordion > div::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 10px;
+}
+
+#sidenavAccordion > div::-webkit-scrollbar-thumb:hover {
+    background: silver;
+}
+
+/***
+    App Display Styles (for root url)
+ */
+
+:root {
+    --hexagon-height: 150px;
+    --border-width: 1rem;
+    --tduration: 0.25s;
+    --bg-hex-color: #212529;
+    --bg-hex-normal-color: rgba(0, 0, 0, 0.65);
+    --bg-inter-color: white;
+    --hexagon-width: calc(var(--hexagon-height) * 1.1);
+    --content-height: calc(var(--hexagon-height) - var(--border-width) * 2);
+    --content-width: calc(var(--hexagon-width) - var(--border-width) * 2);
+}
+
+.hexagon {
+    aspect-ratio: 1/cos(30deg);
+    clip-path: polygon(50% -50%, 100% 50%, 50% 150%, 0 50%);
+    color: var(--bg-hex-normal-color);
+    text-decoration: none;
+}
+
+.hexagon.inner-0 {
+    height: var(--hexagon-height);
+    width: var(--hexagon-width);
+    margin: 1rem;
+    background-color: var(--bg-hex-normal-color);
+}
+
+.hexagon .inner-1 {
+    height: calc(var(--hexagon-height) - var(--border-width));
+    width: calc(var(--hexagon-width) - var(--border-width));
+    background-color: var(--bg-inter-color);
+}
+
+.hexagon .inner-2 {
+    height: var(--content-height);
+    width: var(--content-width);
+    background-color: transparent;
+}
+
+.hexagon .content {
+    height: var(--content-height);
+    width: var(--content-width);
+    background-color: var(--bg-inter-color);
+    font-weight: bolder;
+    padding: 1rem;
+    overflow: hidden;
+}
+
+.inner-0:hover {
+    transition-duration: var(--tduration);
+    scale: 125%;
+    background-color: var(--bg-hex-color);
+}
+
+.inner-0:hover .inner-2 {
+    transition-duration: var(--tduration);
+    background-color: var(--bg-hex-color);
+}
+
+.inner-0:hover .content {
+    transition-duration: var(--tduration);
+    scale: 90%;
+}

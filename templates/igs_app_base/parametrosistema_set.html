@@ -1,0 +1,28 @@
+{% extends "html/html_struct.html" %}
+{% load crud_helpers %}
+
+{% block content %}
+    {% regroup object_list by seccion as lista_secciones %}
+    <form id="main-form" method="post" autocomplete="off" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% for seccion in lista_secciones %}
+            <h3>{{ seccion.grouper }}</h3>
+            {% for param in seccion.list %}
+                <div class="mb-3 row">
+                    <label for="{{ param.seccion }}_{{ param.nombre }}" class="col-sm-3 col-form-label">{{ param.nombre_para_mostrar }}</label>
+                     <div class="col-sm-6">
+                        {{ param.widget }}
+                    </div>
+                    {% if param.tipo.tipo_interno == "PICTURE" %}
+                        <div class="col-sm-3"><img src="{{ MEDIA_URL }}{{ param.valor }}" class="img-fluid" /></div>
+                    {% elif param.tipo.tipo_interno == "FILE" %}
+                        <div class="col-sm-3"><a href="{{ MEDIA_URL }}{{ param.valor }}" target="_blank">{{ param.valor }}</a></div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% endfor %}
+        <button type="submit" class="btn btn-outline-secondary" id="btn-save" title="{% action_label 'save' %}">
+            {% action_icon 'save' %}
+        </button>
+    </form>
+{% endblock %}

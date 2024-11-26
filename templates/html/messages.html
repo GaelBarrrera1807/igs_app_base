@@ -1,0 +1,20 @@
+<!--
+    mensajes = [{
+        'msg': 'msg',
+        'type': 'primary|secondary|..',
+        'dismissible': True|False
+
+    },...]
+-->
+{% if mensajes %}
+    <div class="row">
+    {% for msg in mensajes %}
+        <div class="alert alert-{{ msg.type }} d-flex align-items-center {% if msg.dismissible %}alert-dismissible fade show{% endif %}" role="alert">
+            {{ msg.msg }}
+            {% if msg.dismissible %}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            {% endif %}
+        </div>
+    {% endfor %}
+    </div>
+{% endif %}

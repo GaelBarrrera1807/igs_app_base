@@ -1,0 +1,13 @@
+{% load menu_helpers %}
+<tr>
+    <td>
+        <input class="form-check-input" type="checkbox" value="{{ reg.pk }}" name="pk" />
+    </td>
+    <td>
+        <a href="{% url 'menuopc_read' reg.pk %}">{{ reg.posicion }}) {{ reg|safe }}</a>
+        <input type="hidden" value="p-left-{% widthratio nivel 1 25 %}px" name="class-4-{{ reg.pk }}" id="class-4-{{ reg.pk }}" />
+    </td>
+</tr>
+{% for reg in reg.hijos.all %}
+    {% print_menuopc_adm reg nivel %}
+{% endfor %}

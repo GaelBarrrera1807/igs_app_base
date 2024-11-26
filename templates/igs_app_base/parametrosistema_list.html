@@ -1,0 +1,53 @@
+{% extends "html/html_struct.html" %}
+
+{% block content%}
+    {% if object_list %}
+        <table id="main-data-table">
+            <thead>
+            <tr>
+                <th></th>
+                <th>Sección</th>
+                <th>Nombre</th>
+                <th>Nombre para Mostrar</th>
+                <th>Valor</th>
+                <th>Tipo</th>
+            </tr>
+            </thead>
+            <tfoot>
+            <tr>
+                <th></th>
+                <th>Sección</th>
+                <th>Nombre</th>
+                <th>Nombre para Mostrar</th>
+                <th>Valor</th>
+                <th>Tipo</th>
+            </tr>
+            </tfoot>
+            <tbody>
+            {% for reg in object_list %}
+                <tr>
+                    <td><input class="form-check-input" type="checkbox" value="{{ reg.pk }}" name="pk" /></td>
+                    <td>{{ reg.seccion }}</td>
+                    <td><a href="{% url 'parametrosistema_read' reg.pk %}">{{ reg.nombre }}</a></td>
+                    <td>{{ reg.nombre_para_mostrar }}</td>
+                    <td>
+                        {% if reg.tipo.tipo_interno == "PICTURE" %}
+                            <img src="{{ MEDIA_URL }}{{ reg.valor }}" class="img-fluid" />
+                        {% elif reg.tipo.tipo_interno == "FILE" %}
+                            <a href="{{ MEDIA_URL }}{{ reg.valor }}" target="_blank">{{ reg.valor }}</a>
+                        {% else %}
+                            {{ reg.valor }}
+                        {% endif %}
+                    </td>
+                    <td>{{ reg.tipo }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+    <script type="text/javascript">
+        let update_url = `{% url 'parametrosistema_update' pk=0 %}`;
+        let delete_many_url = `{% url 'parametrosistema_delete_many' %}`;
+    </script>
+{% endblock %}

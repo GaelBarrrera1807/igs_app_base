@@ -1,0 +1,231 @@
+{% load crud_helpers %}
+{% load static %}
+{% load parametro_helpers %}
+{% load menu_helpers %}
+{% load html_helpers %}
+<!DOCTYPE html>
+<html lang="es-mx">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="Rubén Ramírez Gómez RAGR8602025L7 rramirez@rramirez.com" />
+
+        <title>{% parametro_de_sistema seccion='SitioGeneral' nombre='site_title' %}{% if titulo %}: {{ titulo }}{% endif %}</title>
+        <link rel="icon" href="{{ MEDIA_URL }}{% parametro_de_sistema seccion='SitioGeneral' nombre='favicon' %}" type="image/png" />
+
+        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+        <link href="{% static 'css/base-bootstrap.css' %}" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+
+        {% link_apps_tag %}
+
+    </head>
+    <body class="sb-nav-fixed">
+        {% if user.is_authenticated %}
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+            <!-- Navbar Brand-->
+            <a class="navbar-brand ps-3" href="{% url 'session_imin' %}">
+                <img src="{{ MEDIA_URL }}{% parametro_de_sistema seccion='SitioGeneral' nombre='main_toolbar_logo' %}" class="d-inline-block align-top" height="25" />
+                {% parametro_de_sistema seccion='SitioGeneral' nombre='site_name' %}
+            </a>
+            <!-- Sidebar Toggle-->
+            <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
+            {% if titulo %}
+                <div id="page-title" class="d-inline-block text-white me-3">
+                    {{ titulo }}
+                {% if titulo_descripcion %}
+                    <small class="me-3">{{ titulo_descripcion }}</small>
+                {% endif %}
+                </div>
+            {% endif %}
+            <!-- Navbar Search-->
+            <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
+                {% if toolbar_search %}
+                <div class="input-group">
+                    <input class="form-control" type="text" placeholder="Buscar" aria-label="Buscar" aria-describedby="btnNavbarSearch" />
+                    <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
+                </div>
+                {% endif %}
+            </form>
+            <!-- Navbar-->
+            <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+                <li>
+                    <button class="btn btn-outline-secondary fav-in d-none" type="button" title="Eliminar de Favoritos" onclick="delete_fav()">
+                        <i class="fa-solid fa-star"></i>
+                    </button>
+                    <button class="btn btn-outline-secondary fav-out d-none" type="button" title="Agregar a Favoritos" onclick="add_2_fav()">
+                        <i class="fa-regular fa-star"></i>
+                    </button>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="{% url 'user_me' %}">Mi Perfil</a></li>
+                        {% if perms.igs_app_favorito.view_mine_fav %}
+                            <li><a class="dropdown-item" href="{% url 'mine_fav_list' %}">Mis Favoritos</a></li>
+                        {% endif %}
+                        <li><hr class="dropdown-divider" /></li>
+                        <li><a class="dropdown-item" href="{% url 'session_logout'  %}">Salir</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+        <div id="layoutSidenav">
+            <div id="layoutSidenav_nav">
+                <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+                    <div class="sb-sidenav-menu">
+                        <div class="nav">
+                            <div class="sb-sidenav-menu-heading">{% app_name app %}</div>
+                            {% main_menu app=app parent='sidenavAccordion' %}
+                        </div>
+                    </div>
+                    <div id="menu-favs-items" class="sb-sidenav-menu-favs p-3">
+                        <div class="app-heading">Mis Favoritos</div>
+                        {% include 'igs_app_favorito/favorito_get_list.html' %}
+                    </div>
+                    <div class="sb-sidenav-footer">
+                        <div class="small">Logged in as:</div>
+                        {% if user.first_name %}{{ user.first_name }}{% else %}{{ user.username }}{% endif %}
+                    </div>
+                </nav>
+            </div>
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid px-4 py-2">
+                        {% if toolbar %}
+                        <!-- html/toolbar.html BEGIN -->
+                        {% include "html/toolbar.html" %}
+                        <!-- html/toolbar.html END -->
+                        {% endif %}
+
+                        <!-- html/messages.html BEGIN -->
+                        {% include "html/messages.html" %}
+                        <!-- html/messages.html END -->
+
+                        <!-- Templates Iniciales BEGIN-->
+                        {% if include_apps_start %}
+                            {% app_start_templates_inclusion %}
+                        {% endif %}
+                        <!-- Templates Iniciales END-->
+
+                        <!-- block precontent BEGIN -->
+                        {% block precontent %}{% endblock %}
+                        <!-- block precontent END -->
+                        <!-- block content BEGIN -->
+                        {% block content %}{% endblock %}
+                        <!-- block content END -->
+                        <!-- block postcontent BEGIN -->
+                        {% block postcontent %}{% endblock %}
+                        <!-- block postcontent END -->
+                    </div>
+                </main>
+                {% if footer %}
+                    <footer class="py-4 bg-light mt-auto">
+                        <div class="container-fluid px-4">
+                            <div class="d-flex align-items-center justify-content-between small">
+                                <div class="text-muted">Copyright &copy; Your Website 2023</div>
+                                <div>
+                                    <a href="#">Privacy Policy</a>
+                                    &middot;
+                                    <a href="#">Terms &amp; Conditions</a>
+                                </div>
+                            </div>
+                        </div>
+                    </footer>
+                {% endif %}
+            </div>
+        </div>
+        {% else %}
+            {% block unauthenticated %}{% endblock %}
+        {% endif %}
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.8/handlebars.min.js" integrity="sha512-E1dSFxg+wsfJ4HKjutk/WaCzK7S2wv1POn1RRPGh8ZK+ag9l244Vqxji3r6wgz9YBf6+vhQEYJZpSjqWFPg9gg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+        <script type="text/javascript">
+            let read_only = {% if read_only %}true{% else %}false{% endif %};
+            let usr_set_value_url = `{% url 'parametrousuario_set' %}`;
+            let username = `{{ user }}`;
+            console.log(`Logged as: {{ user }} - {{ user.profile }}`);
+            let usr_add_fav_url = `{% url 'favorito_add' %}`;
+            let usr_delete_fav_url = `{% url 'favorito_delete' %}`;
+        </script>
+
+        {% verbatim %}
+        <script type="text/x-handlebars-template" id="modal-panel-message-template">
+            <div id="{{#if idmodal}}{{idmodal}}{{else}}modal-panel-message{{/if}}" class="modal fade" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                    <div class="modal-content">
+                        {{#if title}}
+                        <div class="modal-header">
+                            {{#if title}}
+                            <h5 class="modal-title">{{title}}</h5>
+                            {{/if}}
+                            {{#if close}}
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                            {{/if}}
+                        </div>
+                        {{/if}}
+                        {{#if body}}
+                        <div class="modal-body">
+                            {{{body}}}
+                        </div>
+                        {{/if}}
+                        {{#if footer}}
+                        <div class="modal-footer">
+                            {{footer}}
+                        </div>
+                        {{/if}}
+                    </div>
+                </div>
+            </div>
+        </script>
+
+        <script type="text/x-handlebars-template" id="deleting-confirmation-template">
+            <span class="float-left"><i class="fas fa-exclamation-triangle fa-2x"></i></span>
+            ¿Confirma que realmente desea eliminar {{pre_elemento}} {{elemento}}?
+            <div class="row">
+                <div class="col-sm-6 text-center" style="color: white">
+                    <form id="delete-form" action="{{url}}" method="post">
+                        <button type="submit" class="btn btn-outline-secondary" {% endverbatim %} title="{% action_label 'ok' %}">
+                             {% action_icon 'ok' %} {% action_label 'ok' %}
+                        </button>
+                        {% csrf_token %}
+                    </form>
+                </div>
+                <div class="col-sm-6 text-center">
+                    <button data-bs-dismiss="modal" type="button" class="btn btn-outline-secondary" title="{% action_label 'cancel' %}">
+                        {% action_icon 'cancel' %} {% action_label 'cancel' %}
+                    </button>
+                </div>
+            </div>
+        </script>
+
+        <script type="text/x-handlebars-template" id="deleting-many-confirmation-template">
+            <span class="float-left"><i class="fas fa-exclamation-triangle fa-2x"></i></span>
+            ¿Confirma que realmente desea eliminar las filas seleccionadas?
+            <div class="row">
+                <div class="col-sm-6 text-center" style="color: white">
+                    <button type="submit" class="btn btn-outline-secondary" title="{% action_label 'ok' %}" onclick="delete_many_records_excecute()">
+                         {% action_icon 'ok' %} {% action_label 'ok' %}
+                    </button>
+                </div>
+                <div class="col-sm-6 text-center">
+                    <button data-bs-dismiss="modal" type="button" class="btn btn-outline-secondary" title="{% action_label 'cancel' %}">
+                        {% action_icon 'cancel' %} {% action_label 'cancel' %}
+                    </button>
+                </div>
+            </div>
+        </script>
+
+        <form id="frm-csrfmiddlewaretoken">{% csrf_token %}</form>
+
+        {% link_apps_tag 'js' %}
+
+    </body>
+</html>

@@ -1,0 +1,56 @@
+{% extends "html/html_struct.html" %}
+{% load crud_helpers %}
+
+{% block content%}
+    {% if object_list %}
+        <table id="main-data-table">
+            <thead>
+            <tr>
+                <th></th>
+                <th>Usuario</th>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Teléfono</th>
+                <th>Celular</th>
+                <th>What's App</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tfoot>
+            <tr>
+                <th></th>
+                <th>Usuario</th>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Teléfono</th>
+                <th>Celular</th>
+                <th>What's App</th>
+                <th></th>
+            </tr>
+            </tfoot>
+            <tbody>
+            {% for reg in object_list %}
+                <tr>
+                    <td><input class="form-check-input" type="checkbox" value="{{ reg.pk }}" name="pk" /></td>
+                    <td><a href="{% url 'user_read' reg.pk %}">{{ reg }}</a></td>
+                    <td><a href="{% url 'user_read' reg.pk %}">{{ reg.profile }}</a></td>
+                    <td>{% if reg.email %}<a href="mailto:{{ reg.email }}" target="_blank">{% action_icon 'send_mail' %} {{ reg.email }}</a>{% endif %}</td>
+                    <td>{% if reg.profile.telefono %}<a href="tel:{{ reg.profile.telefono }}" target="_blank">{% action_icon 'call' %} {{ reg.profile.telefono }}</a>{% endif %}</td>
+                    <td>{% if reg.profile.celular %}<a href="tel:{{ reg.profile.celular }}" target="_blank">{% action_icon 'call' %} {{ reg.profile.celular }}</a>{% endif %}</td>
+                    <td>{% if reg.profile.whatsapp %}<a href="https://api.whatsapp.com/send?phone=52{{ reg.profile.whatsapp }}" target="_blank">{% action_icon 'send_whatsapp' %} {{ reg.profile.whatsapp }}</a>{% endif %}</td>
+                    <td>
+                        {% if perms.auth.reset_password %}
+                        <a href="{% url 'user_reset_password' reg.username %}" class="btn btn-outline-secondary">{% action_smart_button 'reset_password' %}</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+    <script type="text/javascript">
+        let update_url = `{% url 'user_update' pk=0 %}`;
+        let delete_many_url = `{% url 'user_delete_many' %}`;
+    </script>
+{% endblock %}

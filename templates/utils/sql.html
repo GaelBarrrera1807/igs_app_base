@@ -1,0 +1,37 @@
+{% extends "html/form.html" %}
+
+{% block precontent %}
+    <p>Ejecución SQL</p>
+{% endblock %}
+
+{% block postcontent%}
+    {% if rows %}
+        <hr />
+        <p>Registros Retornados</p>
+        <table id="main-data-table">
+            <thead>
+                <tr>
+                    {% for hdr in header %}
+                        <th>{{ hdr }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    {% for hdr in header %}
+                        <th>{{ hdr }}</th>
+                    {% endfor %}
+                </tr>
+            </tfoot>
+            <tbody>
+                {% for row in rows %}
+                    <tr>
+                        {% for v in row %}
+                            <td>{{ v }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}

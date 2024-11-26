@@ -1,0 +1,16 @@
+{% load menu_helpers %}
+
+{% for opc in opciones %}
+    {% if opc.hijos.all %}
+        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapse-{{ opc.pk }}" aria-expanded="false" aria-controls="collapse-{{ opc.pk }}">
+            {{ opc|safe }} <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+        </a>
+        <div class="collapse" id="collapse-{{ opc.pk }}" aria-labelledby="heading-{{ opc.pk }}" data-bs-parent="#{{ parent }}">
+            <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordion-{{ opc.pk }}">
+                {% main_menu opc.hijos.all nivel user_pk app 'sidenavAccordion-'|add:opc.pk %}
+            </nav>
+        </div>
+    {% else %}
+        <a class="nav-link" href="{{ opc.vista_url }}">{{ opc|safe }}</a>
+    {% endif %}
+{% endfor %}

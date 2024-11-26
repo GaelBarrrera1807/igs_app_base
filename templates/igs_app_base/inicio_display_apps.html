@@ -1,0 +1,13 @@
+<div class="row">
+    {% for app in apps %}
+        <a class="hexagon inner-0 d-flex align-items-center justify-content-center" href="{%if app.vista_url %}{{ app.vista_url }}{% else %}#{% endif %}">
+            <div class="hexagon inner-1 d-flex align-items-center justify-content-center">
+                <div class="hexagon inner-2 d-flex align-items-center text-center justify-content-center">
+                    <div class="hexagon content d-flex align-items-center text-center justify-content-center">
+                        {{ app }}
+                    </div>
+                </div>
+            </div>
+        </a>
+    {% endfor %}
+</div>
