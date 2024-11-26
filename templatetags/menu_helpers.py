@@ -1,10 +1,10 @@
-from typing import Iterable, Any
+from typing import Any
+from typing import Iterable
 
 from django import template
-from django.contrib.auth.models import AnonymousUser
 from django.contrib.auth.models import User
 
-from igs_app_base.models import MenuOpc, App
+from igs_app_base.models import App
 from igs_app_base.utils.utils import get_user_from_context
 
 register = template.Library()
@@ -14,6 +14,7 @@ register = template.Library()
 def print_menuopc_adm(context, opcion, nivel=-1) -> dict:
     nivel += 1
     return {'nivel': nivel, 'reg': opcion}
+
 
 @register.simple_tag
 def app_name(app: str = None) -> str:
@@ -61,7 +62,7 @@ def display_apps(
         'apps': [
             app.menuopc
             for app in apps
-            if app.menuopc is not None and  app.menuopc.user_has_option(user)],
+            if app.menuopc is not None and app.menuopc.user_has_option(user)],
         'hidden': hidden,
         'template': custom_template
     }

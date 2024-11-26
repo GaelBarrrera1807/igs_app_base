@@ -1,9 +1,11 @@
-from django.contrib.auth.decorators import permission_required, login_required
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import permission_required
 from django.urls import include
 from django.urls import path
 
 from .views import Migrate
-from .vw_app import Configuracion, Administracion
+from .vw_app import Administracion
+from .vw_app import Configuracion
 
 urlpatterns = [
     path('', include('igs_app_base.session.urls')),

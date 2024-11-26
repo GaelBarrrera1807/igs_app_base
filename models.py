@@ -2,11 +2,11 @@ from typing import Any
 
 from django.db import models
 
+from .menu.models import MenuOpc
 from .parametrosistema.models import ParametroSistema
 from .parametrousuario.models import ParametroUsuario
 from .parametrousuario.models import ParametroUsuarioValor
 from .user.models import UserProfile
-from .menu.models import MenuOpc
 
 
 class App(models.Model):

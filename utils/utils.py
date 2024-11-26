@@ -2,7 +2,8 @@ import os
 
 from django.conf import settings
 from django.contrib.auth.decorators import permission_required
-from django.contrib.auth.models import Group, AnonymousUser
+from django.contrib.auth.models import AnonymousUser
+from django.contrib.auth.models import Group
 from django.contrib.auth.models import Permission
 from django.contrib.auth.models import User
 from django.db.models import Model
@@ -18,8 +19,8 @@ from igs_app_base.templatetags.crud_helpers import action_smart_button
 from igs_app_base.templatetags.crud_helpers import crud_label
 from igs_app_base.templatetags.crud_helpers import crud_smart_button
 
-from .permission import model_perms_4_user
 from ..menu.models import MenuOpc
+from .permission import model_perms_4_user
 
 
 def get_model_attr(instance: Any, attr: str) -> Any:
@@ -138,7 +139,8 @@ def crud_toolbar(
         blinder_model: str = None, qs: Any = None) -> list:
     perms, buttons = create_crud_toolbar_dict(
         user, object._meta.model, object.pk, label_and_icon, blinder_model)
-    base_name = blinder_model if blinder_model else object._meta.model.__name__.lower()
+    base_name = blinder_model if blinder_model \
+        else object._meta.model.__name__.lower()
     toolbar = []
     if perms['list']:
         toolbar.append(buttons['list'])
@@ -256,7 +258,7 @@ def create_view_urls(
 
 def add_or_create_menuopc(
         nombre: str, posicion: int, padre: MenuOpc, model_name: str = None,
-        perms: str | list  = "__base__", vista: str = None) -> MenuOpc:
+        perms: str | list = "__base__", vista: str = None) -> MenuOpc:
     if vista is None:
         vista = f"{model_name}_list"
     mnuopc, created = MenuOpc.objects.get_or_create(
@@ -294,8 +296,14 @@ def get_user_from_context(context: Any, user_pk: User | int) -> User | None:
         return None
     return user
 
+
 def get_apps():
-    return [app for app in settings.INSTALLED_APPS
+    return [
+        app for app in settings.INSTALLED_APPS
         if app.find("django.contrib") == -1 and
-           app.find("django_extensions") == -1 and
-           app.find("crispy_") == -1]
+        app.find("django_extensions") == -1 and
+        app.find("crispy_") == -1]
+
+
+def get_from_request(request: Any, param: str) -> str:
+    return request.GET.get(param) or request.POST.get(param)

@@ -1,4 +1,5 @@
-from django.contrib.auth.models import Permission, User
+from django.contrib.auth.models import Permission
+from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
 from django.urls.exceptions import NoReverseMatch

@@ -1,5 +1,3 @@
-from django.urls import path
-
 from .vw import views
 
 obj = 'menuopc'

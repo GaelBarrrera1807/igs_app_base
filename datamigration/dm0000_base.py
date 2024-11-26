@@ -1,4 +1,6 @@
-from django.contrib.auth.models import Group, User, Permission
+from django.contrib.auth.models import Group
+from django.contrib.auth.models import Permission
+from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 
 from igs_app_base.models import App
