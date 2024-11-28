@@ -7,6 +7,7 @@ from django.core.exceptions import ImproperlyConfigured
 from django.db import connection
 from django.db.models import Model
 from django.http import HttpResponse
+from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import CreateView
 from django.views.generic import DeleteView
@@ -17,6 +18,7 @@ from django.views.generic import UpdateView
 from typing import Any
 
 from .templatetags.crud_helpers import crud_label
+from .templatetags.crud_helpers import crud_smart_button
 from .utils.utils import absolute_url
 from .utils.utils import create_view_urls
 from .utils.utils import crud_list_toolbar
@@ -69,6 +71,54 @@ class GenericRead(DetailView):
         context["without_btn_save"] = True
         context["app"] = self.app
         return context
+
+
+class GenericReadSuperCatalog(GenericRead):
+    form_class_opcion = None
+    model_opcion = None
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['toolbar_opciones'] = [
+            {
+                'type': 'button',
+                'label': crud_smart_button('create'),
+                'title': crud_label('create'),
+                'onclick': f'create_tipo_opcion()'},
+            {
+                'type': 'button',
+                'label': crud_smart_button('update'),
+                'title': crud_label('update'),
+                'onclick': f'update_{self.model.__name__.lower()}_opcion()'},
+            {
+                'type': 'button',
+                'label': crud_smart_button('delete'),
+                'title': crud_label('delete'),
+                'onclick': f'delete_tipo_opcion()'}
+        ]
+        context["form_opc"] = self.form_class_opcion()
+        return context
+
+    def create_opcion(self, post: Any):
+        pass
+
+    def update_opcion(self, post: Any):
+        pass
+
+    def delete_opcion(self, post: Any):
+        extra = post.get("extra")
+        if extra:
+            self.model_opcion.objects.filter(pk__in=extra.split(",")).delete()
+
+    def post(self, request, *args, **kwargs):
+        action = request.POST.get("action")
+        if action == "create":
+            self.create_opcion(request.POST)
+        elif action == "update":
+            self.update_opcion(request.POST)
+        elif action == "delete":
+            self.delete_opcion(request.POST)
+        return HttpResponseRedirect(request.path)
 
 
 class GenericCreate(CreateView):

@@ -14,6 +14,9 @@ class App(models.Model):
     posicion = models.PositiveSmallIntegerField(default=0)
     display_as_app = models.BooleanField(default=True)
 
+    class Meta:
+        ordering = ['posicion', 'nombre']
+
     def __str__(self):
         return self.nombre
 
