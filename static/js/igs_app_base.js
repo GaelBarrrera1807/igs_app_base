@@ -34,26 +34,34 @@ let update_many_records = () => {
 }
 
 let delete_many_records = () => {
-    openPanel($(`#deleting-many-confirmation-template`).html(), "Confirmación de Eliminación")
+    let ids = Array.from($(`#main-data-table input[type="checkbox"]:checked`)).filter(item => item.name === "pk" && !isNaN(item.value));
+    if(ids.length > 0) {
+        openPanel($(`#deleting-many-confirmation-template`).html(), "Confirmación de Eliminación");
+    }
 }
 
 let delete_many_records_excecute = () => {
-    let ids = Array.from($(`#main-data-table input[type="checkbox"]:checked`)).map(item => item.value).join(",");
-    $.post(delete_many_url, {ids, 'csrfmiddlewaretoken': $(`#frm-csrfmiddlewaretoken input[name="csrfmiddlewaretoken"]`).val()}, response => {
-        if(ids == response) {
-            location.reload();
-        } else {
-            alert(`Error en el procesamiento de eliminación:
+    let ids = Array.from($(`#main-data-table input[type="checkbox"]:checked`)).filter(item => item.name === "pk" && !isNaN(item.value)).map(item => item.value).join(",");
+    if(ids.length > 0) {
+        $.post(delete_many_url, {
+            ids,
+            'csrfmiddlewaretoken': $(`#frm-csrfmiddlewaretoken input[name="csrfmiddlewaretoken"]`).val()
+        }, response => {
+            if (ids == response) {
+                location.reload();
+            } else {
+                alert(`Error en el procesamiento de eliminación:
             ------------------------------------------------
             enviado: ${ids}
             recibido: ${response}
             `);
-        }
-    },"text").fail(ajax_failure);
+            }
+        }, "text").fail(ajax_failure);
+    }
 }
 
 let create_tipo_opcion = () => {
-    openPanel($(`#opction-form-template`).html(), "Nueva Opción");
+    openPanel($(`#opcion-form-template`).html(), "Nueva Opción");
     $(`#main-form-option input[name="action"]`).val('create')
 }
 

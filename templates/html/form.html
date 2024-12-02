@@ -17,6 +17,11 @@ forms = {
 <form method="post" autocomplete="off" enctype="multipart/form-data" id="main-form" action="">
     {% csrf_token %}
 
+    <div class="row">
+        <div class="col-sm-8" id="forms-top-pre">
+            {% block forms_top_pre %}{% endblock %}
+        </div>
+    </div>
     {% if forms.top %}
     <div class="row" id="forms-top">
         <div class="col-sm-8">
@@ -28,31 +33,53 @@ forms = {
         </div>
     </div>
     {% endif %}
+    <div class="row">
+        <div class="col-sm-8" id="forms-top-post">
+            {% block forms_top_post %}{% endblock %}
+        </div>
+    </div>
 
     <div class="row" id="forms-middle">
 
-        {% if forms.left %}
         <div class="col-sm-4" id="forms-left">
-            <!-- forms.left -->
-            {% for form_obj in forms.left %}
-                {% if form_obj.title %}<h5>{{ form_obj.title }}</h5>{% endif %}
-                {% crispy form_obj.form %}
-            {% endfor %}
+            <div id="forms-middle-left-pre">
+                {% block forms_middle_left_pre %}{% endblock %}
+            </div>
+            {% if forms.left %}
+                <!-- forms.left -->
+                {% for form_obj in forms.left %}
+                    {% if form_obj.title %}<h5>{{ form_obj.title }}</h5>{% endif %}
+                    {% crispy form_obj.form %}
+                {% endfor %}
+            {% endif %}
+            <div id="forms-middle-left-post">
+                {% block forms_middle_left_post %}{% endblock %}
+            </div>
         </div>
-        {% endif %}
 
-        {% if forms.right %}
         <div class="col-sm-4" id="forms-right">
-            <!-- forms.right -->
-            {% for form_obj in forms.right %}
-                {% if form_obj.title %}<h5>{{ form_obj.title }}</h5>{% endif %}
-                {% crispy form_obj.form %}
-            {% endfor %}
+            <div id="forms-middle-right-pre">
+                {% block forms_middle_right_pre %}{% endblock %}
+            </div>
+            {% if forms.right %}
+                <!-- forms.right -->
+                {% for form_obj in forms.right %}
+                    {% if form_obj.title %}<h5>{{ form_obj.title }}</h5>{% endif %}
+                    {% crispy form_obj.form %}
+                {% endfor %}
+            {% endif %}
+            <div id="forms-middle-right-post">
+                {% block forms_middle_right_post %}{% endblock %}
+            </div>
         </div>
-        {% endif %}
 
     </div>
 
+    <div class="row">
+        <div class="col-sm-8" id="forms-bottom-pre">
+            {% block forms_bottom_pre %}{% endblock %}
+        </div>
+    </div>
     {% if forms.bottom %}
     <div class="row">
         <div class="col-sm-8" id="forms-bottom">
@@ -64,6 +91,11 @@ forms = {
         </div>
     </div>
     {% endif %}
+    <div class="row">
+        <div class="col-sm-8" id="forms-bottom-post">
+            {% block forms_bottom_post %}{% endblock %}
+        </div>
+    </div>
 
     {% if not without_btn_save %}
     <div class="row" id="forms-submit">
