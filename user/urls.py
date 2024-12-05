@@ -21,12 +21,12 @@ urlpatterns = create_view_urls(
     List, Create, Update, Read, DeleteMany, Delete) + [
     path(
         'reestablecer-password/',
-        permission_required(f'{app_label}.reset_password')(
+        permission_required(f'{app_label}.reset_password', '/')(
             ResetPassword.as_view()),
         name=f"{obj}_reset_password"),
     path(
         'reestablecer-password/<str:username>',
-        permission_required(f'{app_label}.reset_password')(
+        permission_required(f'{app_label}.reset_password', '/')(
             ResetPassword.as_view()),
         name=f"{obj}_reset_password"),
     path(

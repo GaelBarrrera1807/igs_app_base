@@ -265,6 +265,9 @@ class Migrate(TemplateView):
     titulo = "Aplicacion Automática de Migraciones"
     toolbar = None
 
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
     def add_2_db(self, filename: str) -> None:
         sql = f"""
                     INSERT INTO django_migrations(app, name, applied)

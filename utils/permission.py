@@ -10,11 +10,11 @@ def model_perms(model: Any, blinder_model: str = None) -> dict:
     ct = ContentType.objects.get_for_model(model)
     model_name = blinder_model if blinder_model else str(ct.model)
     return {
-        'create': f'{ct.app_label}_{PERM_2_ACTION["create"]}_{model_name}',
-        'read': f'{ct.app_label}_{PERM_2_ACTION["read"]}_{model_name}',
-        'update': f'{ct.app_label}_{PERM_2_ACTION["update"]}_{model_name}',
-        'delete': f'{ct.app_label}_{PERM_2_ACTION["delete"]}_{model_name}',
-        'list': f'{ct.app_label}_{PERM_2_ACTION["list"]}_{model_name}',
+        'create': f'{ct.app_label}.{PERM_2_ACTION["create"]}_{model_name}',
+        'read': f'{ct.app_label}.{PERM_2_ACTION["read"]}_{model_name}',
+        'update': f'{ct.app_label}.{PERM_2_ACTION["update"]}_{model_name}',
+        'delete': f'{ct.app_label}.{PERM_2_ACTION["delete"]}_{model_name}',
+        'list': f'{ct.app_label}.{PERM_2_ACTION["list"]}_{model_name}',
     }
 
 

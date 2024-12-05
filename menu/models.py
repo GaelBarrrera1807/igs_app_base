@@ -36,6 +36,6 @@ class MenuOpc(models.Model):
         if len(self.hijos.all()) == 0:
             return len(self.permisos_requeridos.all()) == 0 \
                 or any([
-                    user.has_perm(p)
+                    user.has_perm(p.content_type.app_label + "." + p.codename)
                     for p in self.permisos_requeridos.all()])
         return any([h.user_has_option(user) for h in self.hijos.all()])
