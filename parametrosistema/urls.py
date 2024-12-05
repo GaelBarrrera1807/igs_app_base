@@ -10,7 +10,7 @@ app_label = 'igs_app_base'
 urlpatterns = views.create_urls(app_label) + [
     path(
         'establecer/',
-        permission_required(f'{app_label}.set_{obj}')(
+        permission_required(f'{app_label}.set_{obj}', '/')(
             Set.as_view()),
         name=f"{obj}_set")
 ]

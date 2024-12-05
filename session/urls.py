@@ -10,5 +10,5 @@ obj = "session"
 urlpatterns = [
     path('', login_required()(ImIn.as_view()), name=f"{obj}_imin"),
     path('entrar/', Login.as_view(), name=f"{obj}_login"),
-    path('salir', Logout.as_view(), name=f"{obj}_logout"),
+    path('salir/', Logout.as_view(), name=f"{obj}_logout"),
 ]

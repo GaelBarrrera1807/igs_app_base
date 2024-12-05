@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import permission_required
-from django.urls import include
+from django.urls import include, reverse
 from django.urls import path
 
 from .views import Migrate
@@ -11,7 +11,7 @@ urlpatterns = [
     path('', include('igs_app_base.session.urls')),
     path(
         "migrar/",
-        permission_required('auth.apply_migration')(Migrate.as_view()),
+        permission_required('auth.apply_migration', '/')(Migrate.as_view()),
         name="aplicar_migraciones_vw"),
     path('sql/', include('igs_app_base.sql.urls')),
     path(

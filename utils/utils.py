@@ -225,32 +225,32 @@ def create_view_urls(
     return [
         path(
             '',
-            permission_required(f"{app_label}.view_{model_name}")(
+            permission_required(f"{app_label}.view_{model_name}", '/')(
                 list_view.as_view()),
             name=f"{model_name}_list"),
         path(
             'nuevo/',
-            permission_required(f"{app_label}.add_{model_name}")(
+            permission_required(f"{app_label}.add_{model_name}", '/')(
                 create_view.as_view()),
             name=f"{model_name}_create"),
         path(
             'actualizar/<int:pk>',
-            permission_required(f"{app_label}.change_{model_name}")(
+            permission_required(f"{app_label}.change_{model_name}", '/')(
                 update_view.as_view()),
             name=f"{model_name}_update"),
         path(
             'eliminar/multiple/',
-            permission_required(f"{app_label}.delete_{model_name}")(
+            permission_required(f"{app_label}.delete_{model_name}", '/')(
                 delete_many_view.as_view()),
             name=f"{model_name}_delete_many"),
         path(
             'eliminar/<int:pk>',
-            permission_required(f"{app_label}.delete_{model_name}")(
+            permission_required(f"{app_label}.delete_{model_name}", '/')(
                 delete_view.as_view()),
             name=f"{model_name}_delete"),
         path(
             '<int:pk>',
-            permission_required(f"{app_label}.view_{model_name}")(
+            permission_required(f"{app_label}.view_{model_name}", '/')(
                 read_view.as_view()),
             name=f"{model_name}_read"),
     ]
