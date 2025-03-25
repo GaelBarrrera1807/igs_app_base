@@ -99,10 +99,10 @@ class GenericReadSuperCatalog(GenericRead):
         context["form_opc"] = self.form_class_opcion()
         return context
 
-    def create_opcion(self, post: Any):
+    def create_opcion(self, post: Any, files: Any):
         pass
 
-    def update_opcion(self, post: Any):
+    def update_opcion(self, post: Any, files: Any):
         pass
 
     def delete_opcion(self, post: Any):
@@ -113,9 +113,9 @@ class GenericReadSuperCatalog(GenericRead):
     def post(self, request, *args, **kwargs):
         action = request.POST.get("action")
         if action == "create":
-            self.create_opcion(request.POST)
+            self.create_opcion(request.POST, request.FILES)
         elif action == "update":
-            self.update_opcion(request.POST)
+            self.update_opcion(request.POST, request.FILES)
         elif action == "delete":
             self.delete_opcion(request.POST)
         return HttpResponseRedirect(request.path)
