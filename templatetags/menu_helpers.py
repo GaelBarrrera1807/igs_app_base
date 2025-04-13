@@ -64,5 +64,5 @@ def display_apps(
             for app in apps
             if app.menuopc is not None and app.menuopc.user_has_option(user)],
         'hidden': hidden,
-        'template': custom_template
+        # 'template': custom_template
     }
