@@ -1,10 +1,13 @@
 {% extends "html/form.html" %}
 
 {% block precontent %}
+    <!-- igs_app_base/utils/sql.html start block precontent -->
     <p>Ejecución SQL</p>
+    <!-- igs_app_base/utils/sql.html end block precontent -->
 {% endblock %}
 
 {% block postcontent%}
+    <!-- igs_app_base/utils/sql.html start block postcontent -->
     {% if rows %}
         <hr />
         <p>Registros Retornados</p>
@@ -34,4 +37,5 @@
             </tbody>
         </table>
     {% endif %}
+    <!-- igs_app_base/utils/sql.html end block postcontent -->
 {% endblock %}

@@ -2,6 +2,7 @@
 {% load crud_helpers %}
 
 {% block content %}
+    <!-- igs_app_base/igs_app_base/parametrosistema_set.html start block content -->
     {% regroup object_list by seccion as lista_secciones %}
     <form id="main-form" method="post" autocomplete="off" enctype="multipart/form-data">
         {% csrf_token %}
@@ -25,4 +26,5 @@
             {% action_icon 'save' %}
         </button>
     </form>
+    <!-- igs_app_base/igs_app_base/parametrosistema_set.html start block content -->
 {% endblock %}

@@ -1,6 +1,7 @@
 {% extends "html/html_struct.html" %}
 
 {% block content %}
+    <!-- igs_app_base/utils/migracion.html start block content -->
     {% for migracion in migraciones %}
         <div class="alert alert-{% if migracion.result == 'ok' %}success{% elif migracion.result == 'previso' %}secondary{% else %}warning{% endif %}" role="alert">
             <div class="row">
@@ -17,4 +18,5 @@
             </div>
         </div>
     {% endfor %}
+    <!-- igs_app_base/utils/migracion.html end block content -->
 {% endblock %}
