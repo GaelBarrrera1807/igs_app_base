@@ -1,6 +1,7 @@
 {% extends "html/html_struct.html" %}
 
 {% block postcontent%}
+    <!-- igs_app_base/igs_app_base/parametrousuario_list.html start block postcontent -->
     {% if object_list %}
         <table id="main-data-table">
             <thead>
@@ -39,4 +40,5 @@
         let update_url = `{% url 'parametrousuario_update' pk=0 %}`;
         let delete_many_url = `{% url 'parametrousuario_delete_many' %}`;
     </script>
+    <!-- igs_app_base/igs_app_base/parametrousuario_list.html start block postcontent -->
 {% endblock %}

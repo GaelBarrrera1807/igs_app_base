@@ -1,4 +1,5 @@
 {% load html_helpers %}
+<!-- igs_app_base/html/helpers/inicio_app.html start -->
 {% for app in apps %}
     <!-- Incluyendo {{ app }} BEGIN -->
     {% if app|app_start_template_exists %}
@@ -8,3 +9,4 @@
     {% endif %}
     <!-- Incluyendo {{ app }} END -->
 {% endfor %}
+<!-- igs_app_base/html/helpers/inicio_app.html start -->

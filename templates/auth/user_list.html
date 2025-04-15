@@ -2,6 +2,7 @@
 {% load crud_helpers %}
 
 {% block content%}
+    <!-- igs_app_base/auth/user_list.html start block content -->
     {% if object_list %}
         <table id="main-data-table">
             <thead>
@@ -53,4 +54,5 @@
         let update_url = `{% url 'user_update' pk=0 %}`;
         let delete_many_url = `{% url 'user_delete_many' %}`;
     </script>
+    <!-- igs_app_base/auth/user_list.html end block content -->
 {% endblock %}

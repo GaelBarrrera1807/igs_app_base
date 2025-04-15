@@ -1,3 +1,4 @@
+<!-- igs_app_base/menu_helpers/display_apps.html start block content -->
 {% if apps %}
     {% if hidden %}
         <div class="hidden-opc d-none">
@@ -15,13 +16,16 @@
         {% else %}
         <div class="row">
         {% for app in apps %}
-            <div class="col-sm-2 mt-2 mb-2">
-                <a class="btn btn-outline-info btn-block btn-lg" href="{%if app.vista_url %}{{ app.vista_url }}{% else %}#{% endif %}" role="button">
+            <div class="col-sm-2 my-2">
+                <div class="d-grid gap-1">
+                <a class="btn btn-outline-secondary btn-lg border-0" href="{%if app.vista_url %}{{ app.vista_url }}{% else %}#{% endif %}" role="button">
                     {{ app }}
                 </a>
+                </div>
             </div>
         {% endfor %}
         </div>
         {% endif %}
     {% endif %}
 {% endif %}
+<!-- igs_app_base/menu_helpers/display_apps.html end block content -->

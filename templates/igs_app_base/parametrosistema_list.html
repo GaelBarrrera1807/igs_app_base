@@ -1,6 +1,7 @@
 {% extends "html/html_struct.html" %}
 
 {% block content%}
+    <!-- igs_app_base/igs_app_base/parametrosistema_list.html start block content -->
     {% if object_list %}
         <table id="main-data-table">
             <thead>
@@ -50,4 +51,5 @@
         let update_url = `{% url 'parametrosistema_update' pk=0 %}`;
         let delete_many_url = `{% url 'parametrosistema_delete_many' %}`;
     </script>
+    <!-- igs_app_base/igs_app_base/parametrosistema_list.html end block content -->
 {% endblock %}

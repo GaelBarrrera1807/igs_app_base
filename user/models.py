@@ -39,3 +39,7 @@ class UserProfile(models.Model):
         elif type_result in ["int", "integer", "number", "numeric"]:
             return 1 if res else 0
         return res      # when type_result in ["bool", "boolean"]
+
+    @property
+    def phone(self):
+        return self.celular if self.celular else self.telefono if self.telefono else self.whatsapp
