@@ -27,7 +27,7 @@ let showDeletingConfirmation = (url, elemento="elemento", pre_elemento="el") => 
 };
 
 let update_many_records = () => {
-    let ids = Array.from($(`#main-data-table input[type="checkbox"]:checked`)).map(item => item.value);
+    let ids = Array.from($(`#main-data-table td:first-child input[type="checkbox"]:checked`)).map(item => item.value);
     if(ids.length > 0) {
         location.href = update_url.replace(`/0`,`/${ids[0]}`);
     }
