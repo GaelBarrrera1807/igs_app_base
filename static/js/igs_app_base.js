@@ -14,9 +14,9 @@ let openPanel = (body, title, close = true, footer = null, idmodal="modal-panel-
 };
 
 let closePanel = (idmodal="modal-panel-message") => {
-   let modal = new bootstrap.Modal(document.getElementById(idmodal));
-   modal.hide
-   modal.dispose()
+   let modal = bootstrap.Modal.getInstance($(`#${idmodal}`));
+   modal.hide();
+   modal.dispose();
 };
 
 let showDeletingConfirmation = (url, elemento="elemento", pre_elemento="el") => {
