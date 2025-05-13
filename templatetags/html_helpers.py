@@ -1,4 +1,5 @@
 from typing import Any
+import urllib.request
 
 from django import template
 from django.template.loader import get_template
@@ -37,3 +38,12 @@ def app_start_templates_inclusion(context: Any) -> dict:
 @register.filter
 def get_from_dict(data_dict, key):
     return data_dict.get(key)
+
+@register.filter
+def get_url_file_content(url):
+    content = f"""/**********
+    {url}
+    **********/"""
+    for line in urllib.request.urlopen(url):
+        content += line.decode('utf-8')
+    return content
