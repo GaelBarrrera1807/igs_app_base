@@ -299,7 +299,7 @@ class Migrate(TemplateView):
             if os.path.exists(file):
                 module_name = os.path.join(
                     app, self.migr_dir, filename).replace(
-                        "/", '.')[:-3]
+                        os.sep, '.')[:-3]
                 module = importlib.import_module(module_name)
                 module.migration()
                 result = "ok"
@@ -307,7 +307,7 @@ class Migrate(TemplateView):
             result = f"{type(e).__name__}: {e}"
         finally:
             return {
-                "file": app + "/" + filename[:-3],
+                "file": app + os.sep + filename[:-3],
                 "result": result,
             }
 
@@ -322,14 +322,14 @@ class Migrate(TemplateView):
                         files = sorted(files)
                         for f in files:
                             if "py" == f[-2:].lower():
-                                if self.verify_db(app + "/" + f):
+                                if self.verify_db(app + os.sep + f):
                                     result = self.apply(app, f)
                                     migraciones.append(result)
                                     if result['result'] == "ok":
-                                        self.add_2_db(app + "/" + f)
+                                        self.add_2_db(app + os.sep + f)
                                 else:
                                     migraciones.append({
-                                        'file': app + "/" + f[:-3],
+                                        'file': app + os.sep + f[:-3],
                                         'result': "previo",
                                     })
         return migraciones
