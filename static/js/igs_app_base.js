@@ -11,12 +11,14 @@ let openPanel = (body, title, close = true, footer = null, idmodal="modal-panel-
     $( document.body ).append( $( html ) );
     let modal = new bootstrap.Modal(document.getElementById(idmodal));
     modal.show();
+    return modal;
 };
 
 let closePanel = (idmodal="modal-panel-message") => {
    let modal = bootstrap.Modal.getInstance($(`#${idmodal}`));
    modal.hide();
    modal.dispose();
+   return modal;
 };
 
 let showDeletingConfirmation = (url, elemento="elemento", pre_elemento="el") => {
