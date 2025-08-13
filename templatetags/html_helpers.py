@@ -1,5 +1,6 @@
-from typing import Any
 import urllib.request
+
+from typing import Any
 
 from django import template
 from django.template.loader import get_template
