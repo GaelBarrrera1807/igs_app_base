@@ -1,7 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import permission_required
-from django.urls import include, reverse
+from django.urls import include
 from django.urls import path
+from django.urls import reverse
 
 from .views import Migrate
 from .vw_app import Administracion
