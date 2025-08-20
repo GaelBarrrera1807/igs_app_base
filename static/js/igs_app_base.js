@@ -9,16 +9,24 @@ let openPanel = (body, title, close = true, footer = null, idmodal="modal-panel-
     let html = template( { title, body, footer, close, idmodal } );
     $( `#${idmodal}` ).remove();
     $( document.body ).append( $( html ) );
-    let modal = new bootstrap.Modal(document.getElementById(idmodal));
-    modal.show();
-    return modal;
+    try {
+        let modal = new bootstrap.Modal(document.getElementById(idmodal));
+        modal.show();
+        return modal;
+    } catch (e) {
+        return null;
+    }
 };
 
 let closePanel = (idmodal="modal-panel-message") => {
-   let modal = bootstrap.Modal.getInstance($(`#${idmodal}`));
-   modal.hide();
-   modal.dispose();
-   return modal;
+    try {
+        let modal = bootstrap.Modal.getInstance($(`#${idmodal}`));
+        modal.hide();
+        modal.dispose();
+        return modal;
+    } catch (e) {
+        return null;
+    }
 };
 
 let showDeletingConfirmation = (url, elemento="elemento", pre_elemento="el") => {
@@ -103,6 +111,140 @@ let ajax_failure = (jqXHR, textStatus, errorThrown) => {
         `;
     alert(message);
     return message;
+}
+
+class DBIndex {
+    constructor(dbname, version=1) {
+        this.dbname = dbname;
+        this.version = version;
+        this.indexedDB = window.indexedDB ||
+            window.mozIndexedDB ||
+            window.webkitIndexedDB ||
+            window.msIndexDB;
+        this.collections = Object();
+        this.db = null;
+        this.opened = false;
+    }
+    add_collection(name, keypath='id', autoincrement=true, indexes=Array()) {
+        let colleccion = {
+            name,
+            keypath,
+            autoincrement,
+            indexes,
+            db: this.db,
+            current_DBIndex: this,
+            create: function (db) {
+                let objectStore = db.createObjectStore(this.name, { keyPath: this.keypath, autoIncrement: this.autoincrement });
+                this.indexes.forEach(index => objectStore.createIndex(index.name, index.keypath, index.options));
+            },
+            insert: async function(record) {
+                if(!this.current_DBIndex.opened) {
+                    await this.current_DBIndex.open();
+                }
+                let current = this;
+                return new Promise((fnOk, fnError) => {
+                    let transaction = current.current_DBIndex.db.transaction([current.name], 'readwrite');
+                    let objectStore = transaction.objectStore(current.name);
+                    let request = objectStore.add(record);
+                    request.onsuccess = () => fnOk(request.result);
+                    request.onerror = () => fnError(`Error al insertar ${record} en ${current.name}`);
+                });
+            },
+            findByIndex: async function(field, value){
+                if(!this.current_DBIndex.opened) {
+                    await this.current_DBIndex.open();
+                }
+                let current = this;
+                return new Promise((fnOk, fnError) => {
+                    let transaction = current.current_DBIndex.db.transaction([current.name], 'readonly');
+                    let objectStore = transaction.objectStore(current.name);
+                    let index = objectStore.index(field);
+                    let request = index.getAll(value);
+                    request.onsuccess = () => fnOk(request.result);
+                    request.onerror = () => fnError(`Error al buscar ${value} en ${field}`);
+                })
+            },
+            findById: async function(id){
+                if(!this.current_DBIndex.opened) {
+                    await this.current_DBIndex.open();
+                }
+                let current = this;
+                return new Promise((fnOk, fnError) => {
+                    let transaction = current.current_DBIndex.db.transaction([current.name], 'readonly');
+                    let objectStore = transaction.objectStore(current.name);
+                    let request = objectStore.get(id);
+                    request.onsuccess = () => fnOk(request.result);
+                    request.onerror = () => fnError(`Error al buscar ${id}`);
+                })
+            },
+            update: async function(id, updates) {
+                if(!this.current_DBIndex.opened) {
+                    await this.current_DBIndex.open();
+                }
+                let current = this;
+                return new Promise((fnOk, fnError) => {
+                    let transaction = current.current_DBIndex.db.transaction([current.name], 'readwrite');
+                    let objectStore = transaction.objectStore(current.name);
+                    let request = objectStore.get(id);
+                    request.onsuccess = () => {
+                        let record = request.result;
+                        if(!record) {
+                            return fnError(`Registro ${id} no encontrado`);
+                        }
+                        let updatedRecord = { ...record, ...updates };
+                        let updateRequest = objectStore.put(updatedRecord);
+                        updateRequest.onsuccess = () => fnOk(updatedRecord);
+                        updateRequest.onerror = () => fnError(`Error al actualizar registro ${id}`);
+                    };
+                    request.onerror = () => fnError(`Registro ${id} no encontrado`);
+                });
+            },
+            delete: async function(id) {
+                if(!this.current_DBIndex.opened) {
+                    await this.current_DBIndex.open();
+                }
+                let current = this;
+                return new Promise((fnOk, fnError) => {
+                    let transaction = current.current_DBIndex.db.transaction([current.name], 'readwrite');
+                    let objectStore = transaction.objectStore(current.name);
+                    let request = objectStore.delete(id);
+                    request.onsuccess = () => fnOk(true);
+                    request.onerror = () => fnError(`Error al eliminar registro ${id}`)
+                });
+            },
+            getAll: async function() {
+                if(!this.current_DBIndex.opened) {
+                    await this.current_DBIndex.open();
+                }
+                let current = this;
+                return new Promise((fnOk, fnError) => {
+                    let transaction = current.current_DBIndex.db.transaction([current.name], 'readonly');
+                    let objectStore = transaction.objectStore(current.name);
+                    let request = objectStore.getAll();
+                    request.onsuccess = () => fnOk(request.result);
+                    request.onerror = () => fnError(`Error al obtener todos los registros`);
+                })
+            }
+        }
+        this.collections[name] = colleccion;
+    }
+    async open() {
+        let current = this;
+        return new Promise((fnOk, fnError) => {
+            current.request = current.indexedDB.open(current.dbname, current.version);
+            current.request.onupgradeneeded = function (event) {
+                  let db = event.target.result;
+                  Object.entries(current.collections).forEach(
+                      ([clave, colecion]) => colecion.create(db));
+            };
+            current.request.onsuccess = event=> {
+                current.db = event.target.result;
+                return fnOk(current.db);
+            };
+            current.request.onerror = event => fnError(`Error al abrir base de datos ${current.dbname}(${current.version}): ${event.target.errorCode}`);
+            current.opened = true;
+        })
+    }
 }
 
 window.addEventListener('DOMContentLoaded', evt => {
